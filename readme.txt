@@ -1,3 +1,7 @@
+Pedro Henrique Alves Guariente RM550301
+Orlando Akio Morii Cardoso RM98067
+David de Medeiros Pacheco Junior RM551462
+
 Especificações: Programa desenvolvido na linguagem de C# .NETCORE 8, usando Migration;
 Certifique-se de que possui instalado:
 
