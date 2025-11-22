@@ -1,0 +1,144 @@
+﻿/*Configurações do corpo (Parte principal)*/
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/*Linha superior das paginas: Colocar no nav*/
+.navbar {
+    background-color: #007bff;
+}
+
+/*Icone de usuario sem foto de perfil*/
+.fa-user {
+    font-size: 24px;
+    color: white;
+    margin-left: 10px;
+}
+
+.navbar .logout-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+    .navbar .logout-button:hover {
+        background-color: #c82333;
+    }
+
+
+/*logo da empresa*/
+.navbar-brand {
+    color: white;
+    font-size: 24px;
+}
+
+/*Div contendo o nome e a foto dos perfis*/
+.user-info {
+    color: white;
+    font-size: 18px;
+}
+
+/*Cabeçalho da pagina*/
+h4 {
+    font-weight: 600;
+    color: #007bff;
+}
+
+.d-flex {
+    display: flex;
+}
+
+/*Lista de opções de paginas na lateral esquerda. Colocar na primeira div que englobará toda a lista de links na lateral esquerda*/
+.sidebar {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    height: 100vh;
+}
+
+    /*Estilo das opções de paginas. Adicionar dentro da div da barra lateral esquerda*/
+    .sidebar .nav-link {
+        color: #333;
+        font-size: 18px;
+        transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        border-radius: 4px;
+    }
+
+        /*Padding entre o icone e a palavra dentro da barra lateral*/
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        /*Linha em baixo das opções da barra lateral*/
+        .sidebar .nav-link:not(:last-child) {
+            border-bottom: 1px solid #bbb;
+        }
+
+/* Todo o conteúdo da pagina deve estar dentro de uma <div class="container mt-5">*/
+
+/*---------------TABLE---------------*/
+
+/* Cabeçalho da tabela*/
+table thead th {
+    background-color: #007bff;
+    color: #fff;
+    text-align: left;
+}
+
+/* Mudar cor da linha da tabela onde o mouse estiver em cima*/
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Espaçamento das células da tabela*/
+table td, table th {
+    padding: 12px;
+}
+
+/* Alterar cursor quando o mouse estiver em cima de um ícone*/
+table .options-toggle {
+    cursor: pointer;
+}
+
+/* Estilos para ícones de status */
+.status-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+table .table-list{
+    font-size:10px;
+}
+select.form-select {
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 2;
+    border-color:gray;
+}
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+}

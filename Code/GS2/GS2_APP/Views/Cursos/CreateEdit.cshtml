@@ -1,0 +1,225 @@
+﻿@model GS2_APP.Models.CursoModel
+
+@{
+    var isEdit = Model.Id > 0;
+    ViewData["Title"] = isEdit ? "Editar Curso" : "Cadastrar Curso";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<form asp-action="@(isEdit ? "Edit" : "Create")" method="post" enctype="multipart/form-data">
+    <div class="modal-body">
+
+        <!-- Nav Tabs -->
+        <ul class="nav nav-tabs mb-3" id="cursoTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="dados-tab" data-toggle="tab" href="#dados" role="tab">Dados do Curso</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="palavras-tab" data-toggle="tab" href="#palavras" role="tab">Palavras-Chave</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="conteudos-tab" data-toggle="tab" href="#conteudos" role="tab">Conteúdos</a>
+            </li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content" id="cursoTabsContent">
+
+            <!-- Dados do Curso -->
+            <div class="tab-pane fade show active" id="dados" role="tabpanel">
+                <div class="form-group">
+                    <label for="Titulo">Título</label>
+                    <input asp-for="Titulo" class="form-control" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Descricao">Descrição</label>
+                    <textarea asp-for="Descricao" class="form-control"></textarea>
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="CargaHorariaHrs">Carga Horária (h)</label>
+                        <input type="number" min=1 asp-for="CargaHorariaHrs" class="form-control" />
+                        <span asp-validation-for="CargaHorariaHrs" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="NivelId">Nível</label>
+                        <select asp-for="NivelId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListaNiveis, "NivelId", "Descricao", Model.NivelId != 0 ? Model.NivelId : (int?)null))">
+                            <option value="">Selecione...</option>
+                        </select>
+                        <span asp-validation-for="NivelId" class="text-danger"></span>
+                     </div>
+                </div>
+
+                <div class="form-group">
+                    
+                </div>
+                <div class="form-group">
+                    <label for="TrilhaAprendizagemId">Trilha de Aprendizagem</label>
+                    <select asp-for="TrilhaAprendizagemId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListaTrilhas, "TrilhaAprendizagemId", "Titulo", Model.TrilhaAprendizagemId != 0 ? Model.TrilhaAprendizagemId : (int?)null))">
+                        <option value="">Selecione...</option>
+                    </select>
+                    <span asp-validation-for="TrilhaAprendizagemId" class="text-danger"></span>
+                </div>
+
+                <!-- Proprietário (somente leitura) -->
+                <div class="form-group">
+                    <label>Proprietário</label>
+                    <input type="hidden" asp-for="ProprietarioId" />
+                    <input class="form-control" value="@Model.ProprietarioNome" readonly />
+                </div>
+            </div>
+
+            <!-- Palavras-Chave -->
+            <div class="tab-pane fade" id="palavras" role="tabpanel">
+                <div class="form-group">
+                    <label>Palavras-Chave Existentes</label>
+                    <select asp-for="PalavrasChaveSelecionadas" class="form-control"
+                            asp-items="@(new MultiSelectList(Model.ListaPalavrasChave, "PalavraChaveId", "Nome", Model.PalavrasChaveSelecionadas))"
+                            multiple>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Adicionar Nova Palavra-Chave</label>
+                    <input asp-for="NovaPalavraChave" class="form-control" placeholder="Digite uma nova palavra-chave" />
+                    <span asp-validation-for="NovaPalavraChave" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Conteúdos -->
+            <div class="tab-pane fade" id="conteudos" role="tabpanel">
+                <div class="form-row align-items-end">
+                    <div class="col-md-5">
+                        <label>Arquivo</label>
+                        <input type="file" id="arquivoInput" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Tipo de Conteúdo</label>
+                        <select id="tipoConteudoInput" class="form-control">
+                            <option value="">Selecione...</option>
+                            @foreach (var t in Model.ListaTiposConteudos)
+                            {
+                                <option value="@t.TipoConteudoId">@t.Descricao</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Ordem</label>
+                        <input type="number" id="ordemInput" class="form-control" value="1" />
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-success" id="adicionarConteudo">+</button>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <h6>Conteúdos Adicionados</h6>
+                    <ul class="list-group" id="conteudosLista">
+                        <!-- Lista será preenchida via JS -->
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal-footer justify-content-center">
+        <button type="submit" class="btn btn-success">@((isEdit) ? "Salvar Alterações" : "Cadastrar")</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var conteudos = [];
+
+            $('#adicionarConteudo').click(function () {
+                var arquivoInput = $('#arquivoInput')[0];
+                var tipoId = $('#tipoConteudoInput').val();
+                var tipoNome = $('#tipoConteudoInput option:selected').text();
+                var ordem = $('#ordemInput').val();
+
+                if (!arquivoInput.files.length || !tipoId || !ordem) {
+                    alert('Preencha todos os campos do conteúdo.');
+                    return;
+                }
+
+                var arquivo = arquivoInput.files[0];
+                var id = new Date().getTime(); // id temporário
+
+                conteudos.push({
+                    id: id,
+                    arquivo: arquivo,
+                    tipoId: tipoId,
+                    tipoNome: tipoNome,
+                    ordem: ordem,
+                    nomeArquivo: arquivo.name
+                });
+
+                atualizarLista();
+                // Limpar campos
+                $('#arquivoInput').val('');
+                $('#tipoConteudoInput').val('');
+                $('#ordemInput').val('1');
+            });
+
+            function atualizarLista() {
+                var ul = $('#conteudosLista');
+                ul.empty();
+                conteudos.forEach(function (c) {
+                    var li = $('<li class="list-group-item d-flex justify-content-between align-items-center"></li>');
+                    li.text(c.nomeArquivo + ' | Tipo: ' + c.tipoNome + ' | Ordem: ' + c.ordem);
+
+                    var btn = $('<button type="button" class="btn btn-sm btn-danger ml-2">Excluir</button>');
+                    btn.click(function () {
+                        conteudos = conteudos.filter(x => x.id !== c.id);
+                        atualizarLista();
+                    });
+
+                    li.append(btn);
+                    ul.append(li);
+                });
+
+                // Atualiza campo oculto com dados para envio
+                var form = $('form');
+                form.find('input[name="ConteudosJson"]').remove();
+                var input = $('<input type="hidden" name="ConteudosJson">');
+                var dados = conteudos.map(c => ({
+                    TipoConteudoId: c.tipoId,
+                    Ordem: c.ordem,
+                    NomeArquivo: c.nomeArquivo
+                }));
+                input.val(JSON.stringify(dados));
+                form.append(input);
+
+                // Prepara FormData para upload na submissão
+                form.off('submit').on('submit', function (e) {
+                    var formData = new FormData(this);
+                    conteudos.forEach(function (c, index) {
+                        formData.append('arquivos', c.arquivo);
+                    });
+                    var action = form.attr('action');
+                    $.ajax({
+                        url: action,
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function () { window.location.href = '/Cursos'; },
+                        error: function () { alert('Erro ao enviar conteúdos'); }
+                    });
+                    e.preventDefault();
+                });
+            }
+        });
+    </script>
+}

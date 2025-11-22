@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - GS2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid d-flex justify-content-between">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                logo
+                <span>GS2</span>
+            </a>
+
+            <div class="ml-auto user-info d-flex align-items-center">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <i class="fas fa-bell mr-2" title="Notificações"></i>
+                    @Context.User.Claims.FirstOrDefault(c => c.Type == "Name")?.Value
+                }
+                <i class="fas fa-user ml-2"></i>
+                <form asp-controller="Login" asp-action="Logout" method="post" style="display:inline;">
+                    <button type="submit" class="logout-button btn btn-outline-danger ml-2">Sair</button>
+                </form>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="d-flex">
+        <div class="sidebar d-flex flex-column" style="min-height: 100vh;">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home"></i> Home
+                </a>
+
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Rotas" ? "active" : "")" asp-controller="Rotas" asp-action="Index">
+                    <i class="fas fa-tasks"></i> Rotas
+                </a>
+                <span>Administração</span>
+                @if (Context.User.IsInRole("Administrador")|| Context.User.IsInRole("Instrutor"))
+                {
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Trilhas" ? "active" : "")" asp-controller="TrilhasAprendizagem" asp-action="Index">
+                        <i class="fas fa-layer-group"></i> Trilha
+                    </a>
+                }
+                @if (Context.User.IsInRole("Administrador"))
+                {
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Usuarios" ? "active" : "")" asp-controller="Usuarios" asp-action="Index">
+                        <i class="fas fa-users"></i> Usuários
+                    </a>
+                }
+
+                @if (Context.User.IsInRole("Administrador") || Context.User.IsInRole("Instrutor"))
+                {
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Cursos" ? "active" : "")"
+                       asp-controller="Cursos" asp-action="Index">
+                        <i class="fas fa-graduation-cap"></i> Cursos
+                    </a>
+                }
+            </div>
+        </div>
+
+
+        <div class="content p-4" style="flex-grow: 1;">
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer>
+        abcde
+    </footer>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        @RenderSection("Scripts", required: false)
+        @RenderSection("Styles", required: false)
+
+
+</body>
+</html>

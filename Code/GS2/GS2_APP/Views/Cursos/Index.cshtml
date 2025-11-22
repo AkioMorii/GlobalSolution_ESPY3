@@ -1,0 +1,115 @@
+﻿@model IEnumerable<GS2_APP.Models.CursoModel>
+
+@{
+    ViewData["Title"] = "Cursos";
+}
+
+<h2 class="mb-4">Cursos</h2>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">Cadastrar Novo Curso</a>
+</div>
+
+<form id="searchForm" method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="searchString">Título</label>
+                <input type="text" id="searchString" name="searchString" class="form-control" placeholder="Buscar por título" value="@ViewData["CurrentFilter"]" />
+            </div>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-secondary mb-3 w-100">Filtrar</button>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <a href="@Url.Action("Index")" class="btn btn-secondary mb-3 w-100">Limpar Filtro</a>
+        </div>
+    </div>
+</form>
+
+<table class="table-list" width="100%">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Nível</th>
+            <th>Trilha</th>
+            <th>Proprietário</th>
+            <th>Carga Horária (h)</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+                <td>@Html.DisplayFor(modelItem => item.NivelNome)</td>
+                <td>@Html.DisplayFor(modelItem => item.TrilhaTitulo)</td>
+                <td>@Html.DisplayFor(modelItem => item.ProprietarioNome)</td>
+                <td>@Html.DisplayFor(modelItem => item.CargaHorariaHrs)</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@item.Id">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal para confirmação de exclusão -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza de que deseja excluir este curso?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <form id="deleteForm" method="post" asp-action="DeleteConfirmed">
+                    <input type="hidden" id="cursoIdToDelete" name="id" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#searchString").on("input", function () {
+                var query = $(this).val();
+                $.get('@Url.Action("Index")', { searchString: query }, function (data) {
+                    $("tbody").html($(data).find("tbody").html());
+                });
+            });
+
+            $("#clearSearch").click(function () {
+                $("#searchString").val("");
+                $.get('@Url.Action("Index")', { searchString: "" }, function (data) {
+                    $("tbody").html($(data).find("tbody").html());
+                });
+            });
+
+            $('#confirmDeleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var modal = $(this);
+                modal.find('#cursoIdToDelete').val(id);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,23 @@
+# VS / solução
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Diretórios de build (.NET / Visual Studio)
+bin/
+obj/
+
+# Arquivos de debug/compilação (caso escapem de bin/obj)
+*.pdb
+*.cache
+*.log
+
+# Arquivos de configuração por usuário
+*.csproj.user
+*.vbproj.user
+*.vcxproj.user
+
+# Configurações locais (dev) - mantêm só o appsettings.json "principal"
+appsettings.Development.json

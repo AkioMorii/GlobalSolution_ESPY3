@@ -1,0 +1,49 @@
+﻿@model TrilhaAprendizagemModel
+
+@{
+    ViewData["Title"] = "Cadastrar Trilha";
+}
+<h2 class="mb-4">Cadastrar Trilha</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create">
+
+            <div class="form-row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group col-md-12">
+                    <label asp-for="Titulo" class="form-label">Titulo</label>
+                    <input asp-for="Titulo" class="form-control" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label asp-for="Descricao" class="form-label">Descrição</label>
+                    <textarea asp-for="Descricao" class="form-control"></textarea>
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label asp-for="CargaHoraria" class="form-label">Carga Horaria(h)</label>
+                <input type="number" min="0" asp-for="CargaHoraria" class="form-control"/>
+                <span asp-validation-for="CargaHoraria" class="text-danger"></span>
+            </div>
+                
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/js/mask.js?v1"></script>
+    <script src="~/js/usuario.js"></script>
+}
