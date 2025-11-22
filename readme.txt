@@ -93,5 +93,8 @@ Criar a migration inicial (se ainda não existir): No Package Manager Console do
         Clique em Restore NuGet Packages (ou Restaurar Pacotes NuGet).
 
 Se estiver usando CLI / VS Code:
-
     Execute no terminal: dotnet restore;
+
+Para se logar, usar: 
+    login: administrador
+    senha: Adm123456!
